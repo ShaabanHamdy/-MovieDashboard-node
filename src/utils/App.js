@@ -1,7 +1,8 @@
 import * as appRouters from "../modules/app.routes.js"
 import cors from 'cors'
 import globalErrorHandling from "./error_handling.js";
-import Connection_db from "../../db/connection_db.js";
+import Connectiondb from "../../db/Connectiondb.js";
+
 
 
 
@@ -11,7 +12,7 @@ import Connection_db from "../../db/connection_db.js";
 const App = (app, express) => {
     app.use(express.json({}))
     app.use(cors())
-    Connection_db()
+    Connectiondb()
     // ===================================================================
     // app.use("/uploads/images", express.static(path.join(__dirName, "../uploads/images")))
     app.use("/uploads", express.static("uploads"))

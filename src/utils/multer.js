@@ -13,10 +13,11 @@ export const myMulter = () => {
 
     const storage = SharpMulter({
         destination: (req, file, callback) => {
-            callback(null, "images")
+            callback(null, "public/uploads") 
         },
         filename: (req, file, cb) => {
-            return `${nanoid(4)}--` + req
+            // return `${nanoid(4)}--` + req
+            cb(null, `${nanoid(4)}--${file.originalname}`);
         },
         imageOptions: {
             quality: 80,
@@ -25,6 +26,7 @@ export const myMulter = () => {
         
     });
     
+
     const fileFilter = (req, file, cb) => {
         if (validationObject.image.includes(file.mimetype)) {
             return cb(null, true)
@@ -39,3 +41,19 @@ export const myMulter = () => {
 
 
 
+
+// export const ResizeImages = async (req) => {
+//     const __dirName = path.dirname(fileURLToPath(import.meta.url))
+//     const fullPath = path.join(__dirName, `../uploads/images`)
+
+//     const uniqueName = `${nanoid(4)}--${req.file.originalname}`
+//     if (!fs.existsSync(fullPath)) {
+//         fs.mkdirSync(fullPath, { recursive: true })
+//     }
+//     //   ============
+//     const processedImage = await sharp(req.file.buffer).resize(500, 500,{
+//         background:"#000"
+//     }).toBuffer()
+//     fs.writeFileSync(`${fullPath}/${uniqueName}`, processedImage)
+
+// }

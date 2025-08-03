@@ -10,7 +10,7 @@ export const addNewMovie = async (req, res, next) => {
 
   const movies = await movieModel.create({
     movieImage: req.files?.movieImage.map(
-      (e) => "http://localhost:5000/" + e.path
+      (e) => "https://movie-dashboard-node.vercel.app/" + e.path
     ),
     title: req.body.title,
     type: req.body.type,
@@ -100,7 +100,7 @@ export const updateMovie = async (req, res, next) => {
         duration: req.body.duration,
         year: req.body.year,
         movieImage: req.files?.movieImage.map(
-          (e) => "http://localhost:5000/" + e.path
+          (e) => "https://movie-dashboard-node.vercel.app/" + e.path
         ),
       },
     },

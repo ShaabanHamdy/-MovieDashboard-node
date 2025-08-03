@@ -1,59 +1,21 @@
-import multer from "multer";
-import SharpMulter from "sharp-multer";
-import { nanoid } from "nanoid";
+import multer from 'multer'
 
-
-
-// ===========================================================
-const validationObject = {
+export const validationObject = {
     image: ['image/png', 'image/jpeg', 'image/gif'],
-    files: ['application/pdf']
+    file: ['application/']
 }
-export const myMulter = () => {
 
-    const storage = SharpMulter({
-        destination: (req, file, callback) => {
-            callback(null, "public/uploads") 
-        },
-        filename: (req, file, cb) => {
-            return `${nanoid(4)}--` + req
-            // cb(null, `${nanoid(4)}--${file.originalname}`);
-        },
-        imageOptions: {
-            quality: 80,
-            resize: { width: 660, height: 900 },
-        },
-        
-    });
-    
-
+export const myMulter = ({
+    customValidation = validationObject.image
+} = {}) => {
+    const storage = multer.diskStorage({})
     const fileFilter = (req, file, cb) => {
-        if (validationObject.image.includes(file.mimetype)) {
-            return cb(null, true)
+        if (!customValidation.includes(file.mimetype)) {
+            return cb(Error("invalid file extension"), false)
         }
-        cb(Error("invalid image extension", { cause: 400 }), false)
+        return cb(null, true)
     }
-    
-    //==============================================================================
     const upload = multer({ fileFilter, storage })
     return upload
 }
 
-
-
-
-// export const ResizeImages = async (req) => {
-//     const __dirName = path.dirname(fileURLToPath(import.meta.url))
-//     const fullPath = path.join(__dirName, `../uploads/images`)
-
-//     const uniqueName = `${nanoid(4)}--${req.file.originalname}`
-//     if (!fs.existsSync(fullPath)) {
-//         fs.mkdirSync(fullPath, { recursive: true })
-//     }
-//     //   ============
-//     const processedImage = await sharp(req.file.buffer).resize(500, 500,{
-//         background:"#000"
-//     }).toBuffer()
-//     fs.writeFileSync(`${fullPath}/${uniqueName}`, processedImage)
-
-// }

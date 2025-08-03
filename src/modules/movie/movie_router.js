@@ -8,8 +8,9 @@ const router = Router();
 
 router.post(
   "/addNewMovie",
-  myMulter().fields([{ name: "movieImage", maxCount: 1 }]),
-  // movieValidation.addNewMovieValidation,
+  // auth(),
+  myMulter({}).single('movieImage'),
+  movieValidation.addNewMovieValidation,
   asyncHandling(movieConnection.addNewMovie)
 );
 
@@ -23,7 +24,6 @@ router.get(
   auth(),
   asyncHandling(movieConnection.getAllMoviesUsers)
 );
-// ========================================================================
 // ========================================================================
 router.delete(
   "/deleteAllMovies",
@@ -42,8 +42,7 @@ router.get("/getOneMovie/:movieId", asyncHandling(movieConnection.getOneMovie));
 // ========================================================================
 router.put(
   "/updateMovie",
-  myMulter().fields([{ name: "movieImage", maxCount: 1 }]),
-  // movieValidation.editMovieValidation,
+  myMulter({}).single('movieImage'),
   asyncHandling(movieConnection.updateMovie)
 );
 

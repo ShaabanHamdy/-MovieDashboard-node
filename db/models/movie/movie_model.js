@@ -10,7 +10,8 @@ const movieSchema = new mongoose.Schema(
     location: { type: String, required: true },
     duration: { type: String, required: true },
     year: { type: String, required: true },
-    movieImage: { type: [Object], required: true },
+    movieImage:   String ,
+    imageId: String,
   },
   {
     toJSON: { virtuals: true },

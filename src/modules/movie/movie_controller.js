@@ -1,17 +1,16 @@
 import movieModel from "../../../db/models/movie/movie_model.js";
 import { Paginate } from "../../utils/paginate.js";
-
+import cloudinary from "../../utils/cloudinary.js";
 export const addNewMovie = async (req, res, next) => {
-  if (!req.files) {
-    next(new Error("please select product picture", { cause: 400 }));
-  }
-  if (await movieModel.findOne({ title: req.body.title }))
-    return next(new Error("there is a movie with this name"));
-
+  if (!req.file)
+    return next(Error("please upload your picture", { cause: 400 }));
+  const { secure_url, public_id } = await cloudinary.uploader.upload(
+    req.file.path,
+    { folder: `movie/${req.body.title}` }
+  );
   const movies = await movieModel.create({
-    movieImage: req.files?.movieImage.map(
-      (e) => "https://movie-dashboard-node.vercel.app/" + e.path
-    ),
+    movieImage: secure_url,
+    imageId: public_id,
     title: req.body.title,
     type: req.body.type,
     director: req.body.director,
@@ -25,21 +24,15 @@ export const addNewMovie = async (req, res, next) => {
 };
 // =========================================================
 export const getAllmovies = async (req, res, next) => {
-  // const { skip, limit } = Paginate(req.query.page, req.query.size);
-  const data = await movieModel
-    .find({
-      $or: [{ title: { $regex: req.query.search || "", $options: "i" } }],
-    })
-    .sort({ createdAt: -1 });
-  // .limit(limit)
-  // .skip(skip)
+  const data = await movieModel.find({}).sort({ createdAt: -1 });
 
-  if (data.length == 0) {
-    next(new Error("no products available"));
+  if (!data.length) {
+    return next(new Error("no Movies Or Tv Shows available"));
   }
 
   res.json({ message: "Done", results: data.length, data });
 };
+
 // ======================================================
 export const deleteAllMovies = async (req, res, next) => {
   const movie = await movieModel.deleteMany();
@@ -62,14 +55,10 @@ export const deleteOnemovie = async (req, res, next) => {
 
 // ==================================================================
 export const getAllMoviesUsers = async (req, res, next) => {
-  // const {limit,skip} = paginate(req.query.page , req.query.size)
   const data = await productModel.find();
-  // .limit(limit).skip(skip)
-
   if (data.length == 0) {
-    next(new Error("no products available"));
+    return next(new Error("no products available"));
   }
-
   res.json({ message: "Done", results: data.length, data });
 };
 // =========================================================
@@ -83,10 +72,16 @@ export const getOneMovie = async (req, res, next) => {
 
 // ======================================
 export const updateMovie = async (req, res, next) => {
-  // const movie = await movieModel.findOne({ _id: req.body.movieId });
-  // console.log(movie);
   if (!(await movieModel.findOne({ _id: req.body.movieId })))
     return next(new Error("movie id fail"));
+
+  if (!req.file)
+    return next(new Error("please upload your picture", { cause: 400 }));
+
+  const { secure_url, public_id } = await cloudinary.uploader.upload(
+    req.file.path,
+    { folder: `movie/${req.body.title}` }
+  );
 
   const updatedMovie = await movieModel.findByIdAndUpdate(
     req.body.movieId,
@@ -99,9 +94,8 @@ export const updateMovie = async (req, res, next) => {
         location: req.body.location,
         duration: req.body.duration,
         year: req.body.year,
-        movieImage: req.files?.movieImage.map(
-          (e) => "https://movie-dashboard-node.vercel.app/" + e.path
-        ),
+        movieImage: secure_url,
+        imageId: public_id,
       },
     },
     { new: true }

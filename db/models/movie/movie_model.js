@@ -12,6 +12,7 @@ const movieSchema = new mongoose.Schema(
     year: { type: String, required: true },
     movieImage:   String ,
     imageId: String,
+     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: [true, "user Id is required"] },
   },
   {
     toJSON: { virtuals: true },

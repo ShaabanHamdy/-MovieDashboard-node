@@ -12,10 +12,7 @@ const App = (app, express) => {
     Connectiondb()
     const __dirName = path.dirname(fileURLToPath(import.meta.url))
     const fullPath = path.join(__dirName, `../../public`)
-    if (!path.existsSync(fullPath)) {
-        path.mkdirSync(fullPath, { recursive: true })
     
-    }
     // ===================================================================
     app.use("/uploads", express.static(path.join(fullPath, `uploads`)))
     // app.use("/uploads", express.static("uploads"))

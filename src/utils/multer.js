@@ -16,8 +16,8 @@ export const myMulter = () => {
             callback(null, "public/uploads") 
         },
         filename: (req, file, cb) => {
-            // return `${nanoid(4)}--` + req
-            cb(null, `${nanoid(4)}--${file.originalname}`);
+            return `${nanoid(4)}--` + req
+            // cb(null, `${nanoid(4)}--${file.originalname}`);
         },
         imageOptions: {
             quality: 80,

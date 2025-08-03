@@ -15,10 +15,7 @@ const addNewMovie = Joi.object({
     "string.empty": "Title cannot be empty",
     "any.required": "Title is required",
   }),
-  movieImage: Joi.string().required().messages({
-    "string.empty": "Movie image cannot be empty",
-    "any.required": "Movie image is required",
-  }),
+  movieImage: Joi.string().required(),
   type: Joi.string().required().messages({
     "string.empty": "Type cannot be empty",
     "any.required": "Type is required",

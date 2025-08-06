@@ -46,16 +46,6 @@ const userSchema = new mongoose.Schema(
         message:
           "Password must contain at least one special character and two capital letters",
       },
-    }, 
-    status: {
-      type: String,
-      default: "offline",
-      enum: ["offline", "online"],
-    },
-    role: {
-      type: String,
-      default: "User",
-      enum: ["User", "Admin"],
     },
   },
   {

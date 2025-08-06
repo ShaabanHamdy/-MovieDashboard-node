@@ -3,8 +3,9 @@ import userModel from "../../../db/models/users/user.model.js";
 import { token_generation } from "../../utils/token_genration.js";
 
 export const signUp = async (req, res, next) => {
-  if (await userModel.findOne({ email: req.body.email }))
+  if (await userModel.findOne({ email: req.body.email })) {
     return next(new Error("email already exist"));
+  }
   const user = new userModel(req.body);
   await user.save();
   if (!user) return next(new Error("fail to create user"));
